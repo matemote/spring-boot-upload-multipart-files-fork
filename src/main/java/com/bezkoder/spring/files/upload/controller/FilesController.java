@@ -42,8 +42,13 @@ public class FilesController {
   public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
     String message = "";
     try {
+      
+      logger.info("Filename: {} ContentType:{}.", file.getName(), file.getContentType());
+      
+      validateMultipartFile(file);
+      
       storageService.save(file);
-
+      
       message = "Uploaded the file successfully: " + file.getOriginalFilename();
       return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     } catch (Exception e) {
@@ -62,7 +67,12 @@ public class FilesController {
     try {
       
       for (MultipartFile multipartFile : files) {
-    	  currentMultipartFile = multipartFile;
+      
+          logger.info("Filename: {} ContentType:{}.", multipartFile.getName(), multipartFile.getContentType());
+          
+          validateMultipartFile(multipartFile);
+          
+          currentMultipartFile = multipartFile;
           storageService.save(multipartFile); 
           message.append("Uploaded the file successfully: " + multipartFile.getOriginalFilename()).append(";");
       }
@@ -73,7 +83,23 @@ public class FilesController {
       return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message.toString()));
     }
   }
-
+  
+  /**
+   * Validation: Only accept PNG and JPG formats.
+   * 
+   * @param file Given MultipartFile.
+   * 
+   * @throws Exception An exception is thrown if it is not a jpg or png file.
+   */
+  private void validateMultipartFile(final MultipartFile file) throws Exception {
+    
+    logger.debug("Filename: {} ContentType:{}.", file.getName(), file.getContentType());
+    
+    if (!("image/png".equals(file.getContentType()) || "image/jpg".equals(file.getContentType()))) {
+    	throw new Exception("This file's content type is not png or jpg.");
+    }
+    
+  }
   
   @GetMapping("/files")
   public ResponseEntity<List<FileInfo>> getListFiles() {
