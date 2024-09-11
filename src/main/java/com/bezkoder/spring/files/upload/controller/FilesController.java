@@ -2,6 +2,9 @@ package com.bezkoder.spring.files.upload.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -28,6 +31,10 @@ import com.bezkoder.spring.files.upload.service.FilesStorageService;
 @RequestMapping("/api")
 public class FilesController {
 
+
+  private static final Logger logger = LoggerFactory.getLogger(FilesController.class);
+
+  
   @Autowired
   FilesStorageService storageService;
 
@@ -47,7 +54,9 @@ public class FilesController {
   
   @PostMapping("/uploadMore")
   public ResponseEntity<ResponseMessage> uploadMoreFile(@RequestParam("file") MultipartFile[] files) {
-     
+    
+    logger.info("uploadMoreFile starts.");
+    
     StringBuffer message = new StringBuffer();
     MultipartFile currentMultipartFile = null;
     try {
@@ -68,6 +77,9 @@ public class FilesController {
   
   @GetMapping("/files")
   public ResponseEntity<List<FileInfo>> getListFiles() {
+  
+    logger.info("getListFiles starts.");
+  
     List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
       String filename = path.getFileName().toString();
       String url = MvcUriComponentsBuilder
