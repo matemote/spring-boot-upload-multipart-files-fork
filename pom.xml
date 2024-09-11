@@ -8,11 +8,11 @@
 		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.bezkoder</groupId>
-	<artifactId>spring-boot-upload-files</artifactId>
+	<groupId>com.ktt</groupId>
+	<artifactId>spring-boot-upload-files-ktt</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-boot-upload-files</name>
-	<description>Spring Boot upload multipart files</description>
+	<name>spring-boot-upload-files-ktt</name>
+	<description>Spring Boot upload multipart files KTT</description>
 
 	<properties>
 		<java.version>17</java.version>
